@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -17,38 +18,14 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/hello', function() {
-    return 'Hello, World!';
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::get('/user/{id}', function($id) {
-    return "User ID: " . $id;
-});
-
-Route::get('/user/{name?}', function($name = 'Guest') {
-    return "Hello, " . $name;
-});
-
-Route::get('/profile', function() {
-    return 'This is the profile page!';
-})-> name('profile');
-
-Route::get('/nadia', function() {
-    return redirect()-> route('profile');
-});
-
-Route::prefix('admin')->group(function(){
-    Route::get('/dashboard', function () { 
-        return 'Admin Dashboard';
-    });
-    
-    Route::get('/profile', function(){ 
-        return 'Admin Profile';
-    });
-});
-
-Route::get('/dashboard', function(){ 
-    return 'Welcome to your Dashboard';
-})->middleware('auth');
-
-Route::resource('post', 'PostController');
+require __DIR__.'/auth.php';
