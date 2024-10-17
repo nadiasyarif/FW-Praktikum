@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SuppliersController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -24,6 +25,8 @@ Route::post('/product', [ProductController::class, 'store'])->name("product-stor
 // Route::delete('/product/{id}', [ProductController::class, 'destroy']);
 
 // Route::resource('product', ProductController::class);
+Route::get('/suppliers/create', [SuppliersController::class, 'create'])->name("suppliers-create");
+Route::post('/suppliers', [SuppliersController::class, 'store'])->name("suppliers-store");
 
 Route::get('/', function () {
     return view('welcome');
