@@ -13,6 +13,13 @@
                     <div class="container mx-auto mt-5">
                         <h2 class="mb-5 text-2xl font-bold">Create New Product</h2>
                         <x-auth-session-status class="mb-4" :status="session('success')" />
+                        @if ($errors->any())
+                            <div class="mb-5 text-sm text-red-600">
+                                @foreach ($errors->all() as $error)
+                                    {{ $error }}
+                                @endforeach
+                            </div>
+                        @endif
                             <form action="{{ route('product-store')}}" method="POST" class="space-y-4">
                             @csrf <!-- Laravel CSRF protection -->
                            
