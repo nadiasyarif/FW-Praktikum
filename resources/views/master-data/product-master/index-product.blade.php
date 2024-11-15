@@ -16,12 +16,19 @@
             {{ session('error') }}
           </div>
         @endif
+
+        <form method="GET" action="{{ route('product-index') }}" class="mb-4 flex items-center">
+          <input type="text" name="search" value="{{ request("search") }}" placeholder="Cari produk.." class="w-1/4 rounded-lg border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500">
+          <button type="submit" class="ml-2 rounded-lg bg-green-500 px-4 py-2 text-white shadow-lg hover:bg-green-600 focus:outline-none focus:ring-2
+          focus:ring-green-500">Cari</button>
+        </form>
         
         <a href="{{ route('product-create')}}">
-            <button class="px-6 py-4 text-white bg-green-500 border border-green-400 rounded-lg shadow-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500">
+            <button class="px-6 py-4 mb-5 text-white bg-green-500 border border-green-400 rounded-lg shadow-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500">
                 Add product data
             </button>
         </a>
+
           <table class="min-w-full border border-collapse border-gray-200">
             <thead>
               <tr class="bg-gray-100">
@@ -38,8 +45,12 @@
             <tbody>
               @foreach ($data as $item)
                 <tr class="bg-white">
-                  <td class="px-4 py-2 border border-gray-200">{{ $item->id }}</td>
-                  <td class="px-4 py-2 border border-gray-200">{{ $item->product_name }}</td>
+                  <td class="border border-gray-200 px-4 py-2">{{ $item->id }}</td>
+                  <td class="border border-gray-200 px-4 py-2 hover: text-blue-500 hover:underline">
+                    <a href="{{ route('product-detail', $item->id) }}">
+                      {{ $item->product_name}}
+                    </a>
+                  </td>
                   <td class="px-4 py-2 border border-gray-200">{{ $item->unit }}</td>
                   <td class="px-4 py-2 border border-gray-200">{{ $item->type }}</td>
                   <td class="px-4 py-2 border border-gray-200">{{ $item->information }}</td>
@@ -56,6 +67,9 @@
               <!-- Tambahkan baris lainnya sesuai kebutuhan -->
             </tbody>
           </table>
+          <div class="mt-4">
+            {{ $data->appends(['search' => request('search')])->links() }}
+          </div>
         </div>
       </div>
     

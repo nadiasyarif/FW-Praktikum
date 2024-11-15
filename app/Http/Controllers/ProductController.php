@@ -10,9 +10,18 @@ class ProductController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $data = Product::all();
+        $query = Product::query();
+
+        if($request->has('search') && $request->search != ''){
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('product_name', 'like', '%' . $search . '%');
+            });
+        }
+
+        $data = $query->paginate(5);
         return view("master-data.product-master.index-product", compact('data'));
     }
 
@@ -50,7 +59,8 @@ class ProductController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $product = Product::findOrFail($id);
+        return view("master-data.product-master.detail-product", compact('product'));
     }
 
     /**
