@@ -28,6 +28,16 @@
                 Add product data
             </button>
         </a>
+        <a href="{{ route('product-export-excel')}}">
+          <button class="px-6 py-4 mb-5 text-green bg-white-500 border border-green-400 rounded-lg shadow-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500">
+              Export (.xls)
+          </button>
+        </a>
+        <a href="{{ route('product-export-pdf')}}">
+          <button class="px-6 py-4 mb-5 text-green bg-white-500 border border-green-400 rounded-lg shadow-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500">
+              Export (.pdf)
+          </button>
+        </a>
 
           <table class="min-w-full border border-collapse border-gray-200">
             <thead>

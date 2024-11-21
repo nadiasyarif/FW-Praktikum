@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\ProductsExport;
 use App\Models\Product;
+use Maatwebsite\Excel\Facades\Excel;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
@@ -109,5 +112,47 @@ class ProductController extends Controller
             return redirect()->back()->with('success','Product Berhasil di Hapus');
         }
         return redirect()->back()->with('error','Product TidaK Ditemukan');
+    }
+
+    public function exportExcel ()
+    {
+        return Excel::download(new ProductsExport, 'product.xlsx');
+    }
+
+    public function exportToPDF()
+    {
+        $export = new ProductsExport();
+        $data = $export->collection();
+
+        $html = '<h1>Products List</h1>';
+        $html .= '<table border="1" cellpadding="5" cellspacing="0" style="width:100%; border-collapse: collapse;">';
+        $html .= '<thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Product Name</th>
+                        <th>Unit</th>
+                        <th>Type</th>
+                        <th>Information</th>
+                        <th>Qty</th>
+                        <th>Producer</th>
+                    </tr>
+                  </thead>';
+        $html .= '<tbody>';
+        foreach ($data as $product) {
+            $html .= '<tr>
+                        <td>' . $product->id . '</td>
+                        <td>' . $product->product_name . '</td>
+                        <td>' . $product->unit . '</td>
+                        <td>' . $product->type . '</td>
+                        <td>' . $product->information . '</td>
+                        <td>' . $product->qty . '</td>
+                        <td>' . $product->producer . '</td>
+                      </tr>';
+        }
+        $html .= '</tbody></table>';
+
+        $pdf = Pdf::loadHTML($html);
+
+        return $pdf->download('products.pdf');
     }
 }
