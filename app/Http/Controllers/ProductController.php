@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Exports\ProductsExport;
 use App\Models\Product;
+use App\Models\Suppliers;
 use Maatwebsite\Excel\Facades\Excel;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
@@ -15,7 +16,7 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Product::query();
+        $query = Product::with('supplier');
 
         if($request->has('search') && $request->search != ''){
             $search = $request->search;
@@ -33,7 +34,8 @@ class ProductController extends Controller
      */
     public function create()
     {
-        return view('master-data.product-master.create-product');
+        $suppliers = Suppliers::all();
+        return view('master-data.product-master.create-product', compact('suppliers'));
     }
 
     /**
@@ -49,6 +51,7 @@ class ProductController extends Controller
             'information'=> 'nullable|string',
             'qty'=> 'required|integer',
             'producer'=> 'required|string|max:255',
+            'supplier_id'=> 'required|exists:suppliers,id',
         ]);
 
         // proses simpan data kedalam database
@@ -87,6 +90,7 @@ class ProductController extends Controller
             'information'=> 'nullable|string',
             'qty'=> 'required|integer',
             'producer'=> 'required|string|max:255',
+            'supplier_id'=> 'required|exists:suppliers,id',
         ]);
         $product = Product::findOrFail($id);
         $product->update([
@@ -96,6 +100,7 @@ class ProductController extends Controller
             'information'=> $request->information,
             'qty'=> $request->qty,
             'producer'=> $request->producer,
+            'supplier_id'=> $request->id,
         ]);
         return redirect()->back()->with('success', 'Product update successfully!');
 

@@ -58,7 +58,17 @@
                                 <label for="producer" class="block text-sm font-medium text-gray-700">Producer</label>
                                 <input type="text" id="producer" name="producer" class="block w-full p-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" required>
                             </div>
-               
+
+                            <div class="form-group">
+                                <label for="supplier" class="block text-sm font-medium text-gray-700">Supplier</label>
+                                <select id="supplier" name="supplier_id" class="mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-sm focus:border-indigo-500 focus: outline-none focus: ring-indigo-500 sm:text-sm" required>
+                                    <option value="" disabled selected>Select a supplier</option>
+                                    @foreach ($suppliers as $supplier)
+                                    <option value="{{ $supplier->id }}">{{ $supplier->supplier_name}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+
                             <button type="submit" class="inline-flex justify-center px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Submit</button>
                         </form>
                     </div>
